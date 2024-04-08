@@ -22,4 +22,16 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
+    public User signIn(String email, String password) {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new RuntimeException("User Not Found");
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+        return user;
+    }
 }
